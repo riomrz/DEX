@@ -88,15 +88,18 @@ describe('DEX', function (accounts) {
     })
 
 
-    // FIXME: expect with error thrown doesn't work
     /* it("If DEX receives less CryptoDev Token than the initial ratio it must fail", async function () {
         const withdrawAmount = 60
 
         // User3 transfers ETH and CryptoDev token to DEX
         await token.connect(user3).approve(dex.address, withdrawAmount);
+        // await dex.connect(user3).addLiquidity(withdrawAmount, { value: 20 })
+
+        // VM Exception while processing transaction: reverted with reason string 'Amount of tokens sent is less than the minimum tokens required'
         expect(
-            await dex.connect(user3).addLiquidity(withdrawAmount, { value: 20 })
-        ).to.throw('Amount of tokens sent is less than the minimum tokens required');
+            async function () { await dex.connect(user3).addLiquidity(withdrawAmount, { value: 20 }); }
+        ).to.throw(Error);
+        // FIXME: chai.js assert/throw etc. functions throw an AssertionError when passing async function. The problem seems not solved in version 4 (neither canary: https://github.com/chaijs/chai/issues/958 )
 
         // Check DEX reserves
         const dexReserve = await dex.getReserve();
